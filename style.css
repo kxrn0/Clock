@@ -1,0 +1,263 @@
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font: inherit;
+}
+
+body {
+    background: rgb(239, 245, 228);
+    font-family: Helvetica;
+    color: darkslategrey;
+}
+
+/* NAV BAR */
+
+.nav-bar ul {
+    list-style: none;
+    background: rgb(230, 173, 100);
+    padding : 20px;
+    display: flex;
+    gap: 20px;
+    position : relative;
+}
+
+.nav-bar input[type="checkbox"] {
+    position: absolute;
+    right : 10px;
+}
+
+.nav-bar button {
+    padding: 10px;
+    font-size: 18px;
+    background: rgb(236, 238, 121);
+    border: none;
+    border-radius: 5px;
+}
+
+.nav-bar button:hover {
+    background: rgb(200, 224, 112);
+}
+
+.nav-bar button:active {
+    background: rgb(206, 204, 105);
+    transform: scale(.99);
+}
+
+/* QUOTE */
+
+.quote-container {
+    padding : 20px;
+    display: flex;
+    height: 200px;
+    justify-content: center;
+    gap: 10px;
+    text-align: center;
+}
+
+.quote-container h2 {
+    width: 800px;
+    font-size: 1.5rem;
+}
+
+.quote-container a {
+    width: 350px;
+    display: block;
+    margin-top: 10px;
+    font-size: 18px;
+    color:rgb(218, 134, 24);
+}
+
+.quote-container a:hover {
+    color: rgb(238, 49, 15);
+}
+
+.quote-container a:visited {
+    color: rgb(221, 19, 86);
+}
+
+.change-quote {
+    width: 50px;
+    height: 50px;
+    background: url("images/change.png");
+    background-size: cover;
+    margin-left: 20px;
+    border: none;
+}
+
+.change-quote:hover {
+    transform: scale(1.05);
+}
+
+.change-quote:active {
+    transform: scale(.99);
+}
+
+
+/* TIME */
+
+.time-warper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.time-warper .time {
+    font-size: 150px;
+}
+
+.time-warper .day {
+    font-size: 30px;
+}
+
+.butts-container button {
+    padding: 10px;
+    margin: 10px;
+    border: none;
+    border-radius: 5px;
+    background: rgb(230, 190, 118);
+}
+
+/* --------------------------------- */
+
+@media screen and (max-width: 500px) {
+    /* body {
+        background: red;
+        color: yellow;
+    } */
+
+    /* NAV BAR */
+
+    .nav-bar ul {
+        list-style: none;
+        background: rgb(230, 173, 100);
+        padding : 10px;
+        display: flex;
+        gap: 10px;
+        position : relative;
+    }
+    
+    .nav-bar input[type="checkbox"] {
+        position: absolute;
+        right : 10px;
+    }
+    
+    .nav-bar button {
+        padding: 10px;
+        font-size: 16px;
+        background: rgb(236, 238, 121);
+        border: none;
+        border-radius: 5px;
+    }
+    
+    .nav-bar button:hover {
+        background: rgb(200, 224, 112);
+    }
+    
+    .nav-bar button:active {
+        background: rgb(206, 204, 105);
+        transform: scale(.99);
+    }    
+
+    .quote-container {
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        /* height: 210px; */
+        height: auto;
+        padding: 10px;
+    }
+
+    .quote-box {
+        margin-top: 10px;
+    }
+
+    .quote-container h2 {
+        /* width: 300px; */
+        width: 100%;
+        font-size: 1.1rem;
+    }
+
+    .change-quote {
+        margin: 0;
+        width: 30px;
+        height: 30px;
+    }
+
+    /* QUOTE */
+
+    /* .quote-container {
+        padding : 10px;
+        display: flex;
+        height: 150px;
+        justify-content: center;
+        gap: 5px;
+        background: red;
+    }
+    
+    .quote-container h2 {
+        text-align: center;
+        width: 300px;
+        font-size: 1.1rem;
+    } */
+    
+    /* .quote-container a {
+        width: 350px;
+        display: block;
+        margin-top: 10px;
+        font-size: 18px;
+        color:rgb(218, 134, 24);
+    }
+    
+    .quote-container a:hover {
+        color: rgb(238, 49, 15);
+    }
+    
+    .quote-container a:visited {
+        color: rgb(221, 19, 86);
+    } */
+
+
+
+    /* .change-quote {
+        width: 50px;
+        height: 50px;
+        background: url("images/change.png");
+        background-size: cover;
+        margin-left: 20px;
+        border: none;
+    }
+    
+    .change-quote:hover {
+        transform: scale(1.05);
+    }
+    
+    .change-quote:active {
+        transform: scale(.99);
+    } */
+    
+
+    /* TIME */
+
+    .time-warper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .time-warper .time {
+        font-size: 50px;
+    }
+    
+    .time-warper .day {
+        font-size: 30px;
+    }
+    
+    .butts-container button {
+        padding: 10px;
+        margin: 10px;
+        border: none;
+        border-radius: 5px;
+        background: rgb(230, 190, 118);
+    }
+}

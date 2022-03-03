@@ -3,17 +3,6 @@ const timer = document.getElementById("timer-butt");
 const stopwatch = document.getElementById("stopwatch-butt");
 const mainSection = document.getElementById("main-section");
 
-function draw_arrow(canvas, arrow, width, height, angle) {
-    let context;
-
-    context = canvas.getContext("2d");
-    context.save();
-    context.translate(canvas.width / 2, canvas.height / 2);
-    context.rotate(angle);
-    context.drawImage(arrow, - width / 2, 0, width, height);
-    context.restore();
-}
-
 function map(value, start1, end1, start2, end2) {
     return start2 + (end2 - start2) * (value - start1) / (end1 - start1);
 }
@@ -40,7 +29,6 @@ let clockObj = (
 
         let clockKiller, basedFormat, analog;
 
-        //quote.classList.ad("quote");
         getAnother.classList.add("change-quote");
         quoteBox.classList.add("quote-box");
         quoteContainer.classList.add("quote-container");
@@ -48,11 +36,8 @@ let clockObj = (
 
         quoteBox.append(quote);
         quoteBox.append(quoteLink);
-        // quoteContainer.append(quote);
-        // quoteContainer.append(quoteLink);
         quoteContainer.append(quoteBox);
         quoteContainer.append(getAnother);
-        //quoteContainer.append(getAnother);
         getAnother.addEventListener("click", get_quote);
         time.classList.add("time");
         day.classList.add("day");
@@ -220,9 +205,6 @@ let clockObj = (
         function append_clock() {
             mainSection.append(quoteContainer);
             mainSection.append(timeWarper);
-            // mainSection.append(time);
-            // mainSection.append(day);
-            //mainSection.append(divButts);
         }
 
         function kill_clock() {
@@ -239,6 +221,17 @@ let clockObj = (
             time.innerText = `${hours}:${minutes}:${seconds} ${basedFormat ? '' : date.getHours() < 12 ? " AM" : " PM"}`;
             day.innerText = new Date().toDateString();
             clockKiller = setTimeout(run_digital_clock, 1000);
+        }
+
+        function draw_arrow(canvas, arrow, width, height, angle) {
+            let context;
+        
+            context = canvas.getContext("2d");
+            context.save();
+            context.translate(canvas.width / 2, canvas.height / 2);
+            context.rotate(angle);
+            context.drawImage(arrow, - width / 2, 0, width, height);
+            context.restore();
         }
 
         function start_clock() {
@@ -272,24 +265,22 @@ timer.addEventListener("click", () => {
     const h1 = document.createElement("h1");
 
     clear();
-    h1.innerText = "Cococa";
+    h1.innerText = "Sneed";
     mainSection.append(h1);
 
     clockObj.kill_clock();
 
-    //make_timer();
 });
 
 stopwatch.addEventListener("click", () => {
     const h1 = document.createElement("h1");
 
     clear();
-    h1.innerText = "Sxarp";
+    h1.innerText = "Feed";
     mainSection.append(h1);
 
     clockObj.kill_clock();
 
-    //make_stopwatch();
 });
 
 function clear() {

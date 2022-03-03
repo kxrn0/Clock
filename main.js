@@ -39,9 +39,30 @@ let clockObj = (
         quoteContainer.append(quoteBox);
         quoteContainer.append(getAnother);
         getAnother.addEventListener("click", get_quote);
+
         time.classList.add("time");
         day.classList.add("day");
         timeWarper.classList.add("time-warper");
+        timeWarper.append(time);
+        timeWarper.append(day);
+        timeWarper.append(divButts);
+
+        divButts.classList.add("butts-container");
+        appearButt.classList.add("toggle-analog-digital");
+        formatButt.classList.add("toggle-hour-format");
+        appearButt.innerText = "Toggle Analog";
+        formatButt.innerText = "12 hour format";
+        divButts.append(appearButt);
+        divButts.append(formatButt);
+
+        hand.src = "images/hand.png";
+        basedFormat = true;
+        analog = false;
+
+        formatButt.addEventListener("click", () => {
+            basedFormat = !basedFormat;
+            formatButt.innerText = `${basedFormat ? 12 : 24} hour format`;
+        });
 
         get_quote();
 
@@ -101,35 +122,20 @@ let clockObj = (
                     do {
                         child = response.data.children[Math.floor(Math.random() * response.data.children.length)];
                     } while (child.data.title.length > 200 && window.innerWidth < 500);
-                    quote.innerText = child.data.title;
+                    quote.innerHTML = child.data.title;  //...
                     quoteLink.innerText = sub == "todayilearned" ? "read more" : ` by u/${child.data.author} on reddit`;
                     quoteLink.href = child.data.url;
                 });
         }
 
-        divButts.classList.add("butts-container");
-        appearButt.classList.add("toggle-analog-digital");
-        formatButt.classList.add("toggle-hour-format");
-        appearButt.innerText = "Toggle Analog";
-        formatButt.innerText = "12 hour format";
-        divButts.append(appearButt);
-        divButts.append(formatButt);
-        timeWarper.append(time);
-        timeWarper.append(day);
-        timeWarper.append(divButts);
-
         if (window.innerWidth < 400) {
-            canvas.width = .9 * window.innerWidth;
+            canvas.width = .85 * window.innerWidth;
             canvas.height = window.innerWidth;
         }
         else {
             canvas.width = 500;
             canvas.height = 500;
         }
-        hand.src = "images/hand.png";
-
-        basedFormat = true;
-        analog = false;
 
         appearButt.addEventListener("click", () => {
             kill_clock();
@@ -197,11 +203,6 @@ let clockObj = (
             anime();
         }
 
-        formatButt.addEventListener("click", () => {
-            basedFormat = !basedFormat;
-            formatButt.innerText = `${basedFormat ? 12 : 24} hour format`;
-        });
-
         function append_clock() {
             mainSection.append(quoteContainer);
             mainSection.append(timeWarper);
@@ -254,6 +255,8 @@ clock.addEventListener("click", () => {
     clear();
     clockObj.start_clock();
 });
+
+//--------------------------------------------------------------
 
 let timerObj = (
     () => {

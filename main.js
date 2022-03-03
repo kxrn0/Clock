@@ -7,8 +7,6 @@ function map(value, start1, end1, start2, end2) {
     return start2 + (end2 - start2) * (value - start1) / (end1 - start1);
 }
 
-alert(window.innerWidth);
-
 let clockObj = (
     () => {
         const quoteBox = document.createElement("div");
@@ -130,7 +128,7 @@ let clockObj = (
                 });
         }
 
-        if (window.innerWidth < 400) {
+        if (window.innerWidth < 500) {
             canvas.width = .85 * window.innerWidth;
             canvas.height = window.innerWidth;
         }

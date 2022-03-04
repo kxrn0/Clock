@@ -26,6 +26,7 @@ let clockObj = (
         const canvas = document.createElement("canvas");
         const context = canvas.getContext("2d");
         const hand = document.createElement("img");
+        const minWidth = 500;
 
         let clockKiller, basedFormat, analog;
 
@@ -85,11 +86,11 @@ let clockObj = (
                 let circles, distance, angle, angleInc, minRad, maxRad;
 
                 circles = 20;
-                distance = 50;
+                distance = 45;
                 angle = 0;
                 angleInc = Math.PI * 2 / circles;
                 minRad = 1;
-                maxRad = 7;
+                maxRad = 6;
                 
                 iconContext.clearRect(0, 0, canvas.width, canvas.height);
                 for (let i = 0; i < circles; i++, angle += angleInc) {
@@ -121,20 +122,20 @@ let clockObj = (
 
                     do {
                         child = response.data.children[Math.floor(Math.random() * response.data.children.length)];
-                    } while (child.data.title.length > 200 && window.innerWidth < 500);
+                    } while (child.data.title.length > 200 && window.innerWidth < minWidth);
                     quote.innerHTML = child.data.title;  //...
                     quoteLink.innerText = sub == "todayilearned" ? "read more" : ` by u/${child.data.author} on reddit`;
                     quoteLink.href = child.data.url;
                 });
         }
 
-        if (window.innerWidth < 500) {
-            canvas.width = .85 * window.innerWidth;
+        if (window.innerWidth < minWidth) {
+            canvas.width = .9 * window.innerWidth;
             canvas.height = window.innerWidth;
         }
         else {
-            canvas.width = 500;
-            canvas.height = 500;
+            canvas.width = minWidth;
+            canvas.height = minWidth;
         }
 
         appearButt.addEventListener("click", () => {
@@ -249,7 +250,7 @@ let clockObj = (
     }
 )();
 
-clockObj.start_clock();
+//clockObj.start_clock();
 
 clock.addEventListener("click", () => {
     clear();

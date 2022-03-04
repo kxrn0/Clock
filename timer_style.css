@@ -1,0 +1,157 @@
+:root {
+    --input-field-color: rgb(249, 255, 215);
+    --normal-button-bg: rgb(230, 194, 37);
+}
+
+.timers {
+    padding : 25px;
+    gap: 25px;
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.timer {
+    background: rgb(230, 231, 143);
+    width: 325px;
+    position: relative;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: var(--normal-button-bg);
+    background-image: url("images/close.png");
+    background-size: cover;
+    width: 25px;
+    height: 25px;
+    border: none;
+    border-radius: 50%;
+}
+
+.close:hover {
+    background: rgb(190, 187, 74);
+    background-image: url("images/close.png");
+    background-size: cover;
+}
+
+.close:active {
+    background: rgb(164, 175, 68);
+    transform: scale(.98);
+    background-image: url("images/close.png");
+    background-size: cover;
+}
+
+.timer-guts {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.timer-name {
+    text-align: center;
+    padding: 5px;
+    background: var(--input-field-color);
+    width: 150px;
+    border: none;
+    font-size: 1.25rem;
+    border-radius: 5px;
+    margin: 10px;
+}
+
+.progress-bar {
+    position: relative;
+}
+
+.progress-bar button {
+    width: 76px;
+    height: 76px;
+    position: absolute;
+    top: 38px;
+    left: 38px;
+    background: url("images/play.png");
+    background-size: cover;
+    border: none;
+}
+
+.timer-guts ul {
+    list-style: none;
+    display: flex;
+}
+
+.timer-guts ul input[type="tel"] {
+    width: 75px;
+    text-align: center;
+    background: var(--input-field-color);
+    border: none;
+    padding: 5px;
+    font-size: 2.5rem;
+    border-radius: 5px;
+}
+
+.inputs span {
+    font-size: 2.5rem;
+}
+
+.labels {
+    display: flex;
+    justify-content: space-around;
+    font-size: 1.25rem;
+}
+
+.timer-increments {
+    margin-top: 50px;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.timer-increments button {
+    text-align: center;
+    background: var(--normal-button-bg);
+    padding: 5px 10px;
+    font-size: 1.25rem;
+    width: 50px;
+    border-radius: 15px;
+    border: none;
+}
+
+.timer-increments p {
+    text-align: center;
+}
+
+.timer-increments button:hover {
+    background: rgb(190, 187, 74);
+}
+
+.timer-increments button:active {
+    background: rgb(164, 175, 68);
+    transform: scale(.98);
+}
+
+.timer-timer {
+    justify-content: space-around;
+    font-size: 3rem;
+}
+
+.timer-timer li {
+    display: flex;
+    justify-content: center;
+}
+
+.timer-timer p {
+    width: 75px;
+    text-align: center;
+    background: rgb(217, 253, 242);
+    border-radius: 5px;
+}
+
+/* .timer-inputs .inputs {
+    display: none;
+}  */
+
+.timer-inputs .timer-timer {
+    display: none;
+}

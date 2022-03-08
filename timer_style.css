@@ -14,17 +14,18 @@
 .timer {
     background: rgb(230, 231, 143);
     width: 325px;
+    height: 425px;
     position: relative;
     padding: 20px;
     border-radius: 10px;
 }
 
-.close {
+.close, .reset {
     position: absolute;
     top: 10px;
-    right: 10px;
+    /* right: 10px; */
     background: var(--normal-button-bg);
-    background-image: url("images/close.png");
+    /* background-image: url("images/close.png"); */
     background-size: cover;
     width: 25px;
     height: 25px;
@@ -32,17 +33,35 @@
     border-radius: 50%;
 }
 
-.close:hover {
+.close:hover, .reset:hover {
     background: rgb(190, 187, 74);
     background-image: url("images/close.png");
     background-size: cover;
 }
 
-.close:active {
+.close:active, .reset:active {
     background: rgb(164, 175, 68);
     transform: scale(.98);
-    background-image: url("images/close.png");
+    /* background-image: url("images/close.png"); */
     background-size: cover;
+}
+
+.reset {
+    left: 10px;
+    background-image: url("images/reset.png");
+}
+
+.reset:hover, .reset:active {
+    background-image: url("images/reset.png");
+}
+
+.close {
+    right: 10px;
+    background-image: url("images/close.png");
+}
+
+.close:hover, .close:active {
+    background-image: url("images/close.png");   
 }
 
 .timer-guts {
@@ -152,6 +171,38 @@
     display: none;
 }  */
 
-.timer-inputs .timer-timer {
+/* .timer-inputs .timer-timer {
     display: none;
+} */
+
+.add-timer {
+    width: 325px;
+    height: 425px;
+    background: rgb(230, 231, 143);
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 
+    filter from here : https://codepen.io/sosuke/pen/Pjoqqp
+*/
+
+.add-timer button {
+    width: 200px;
+    height: 200px;
+    background: url("images/plus.png");
+    background-size: cover;
+    filter: invert(85%) sepia(61%) saturate(1406%) hue-rotate(0deg) brightness(80%) contrast(75%);
+    border: none;
+}
+
+.add-timer button:hover {
+    filter: invert(85%) sepia(61%) saturate(1406%) hue-rotate(20deg) brightness(80%) contrast(50%);
+}
+
+.add-timer button:active {
+    filter: invert(85%) sepia(61%) saturate(1406%) hue-rotate(10deg) brightness(80%) contrast(30%);
+    transform: scale(.98);
 }

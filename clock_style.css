@@ -118,6 +118,15 @@ body {
     background: rgb(230, 190, 118);
 }
 
+.butts-container button:hover {
+    background: rgb(218, 183, 108);
+}
+
+.butts-container button:active {
+    background: rgb(207, 192, 102);
+    transform: scale(.98);
+}
+
 /* --------------------------------- */
 
 @media screen and (max-width: 500px) {

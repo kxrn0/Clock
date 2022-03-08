@@ -3,6 +3,345 @@ const timer = document.getElementById("timer-butt");
 const stopwatch = document.getElementById("stopwatch-butt");
 const mainSection = document.getElementById("main-section");
 
+let timerObj = (
+    () => {
+        const timersContainer = document.createElement("div");
+        const addTimer = document.createElement("div");
+        const button = document.createElement("button");
+        let timers
+        
+        timers = [];
+
+        addTimer.classList.add("add-timer");
+        addTimer.append(button);
+
+        button.addEventListener("click", () => {
+            let newTimer;
+            
+            newTimer = create_timer(`Timer ${timers.length}`, 60);
+            timers.push(newTimer);
+            timersContainer.removeChild(addTimer);
+            timersContainer.append(newTimer.markup);
+            timersContainer.append(addTimer);
+        });
+        timersContainer.classList.add("timers");
+
+        function switch_to_timer() {
+            if (!timers.length)
+                timers[0] = create_timer("Timer 0", 60);
+            append_timers();
+        }
+
+        function append_timers() {
+            for (let tim of timers)
+                timersContainer.append(tim.markup);
+            timersContainer.append(addTimer);
+            mainSection.append(timersContainer)
+        }
+
+        function create_ul(items, content) {
+            const ul = document.createElement("ul");
+
+            for (let i = 0; i < items; i++) {
+                const li = document.createElement("li");
+
+                for (let element of content[i]) {
+                    const htmlElem = document.createElement(element.type);
+
+                    for (let attribute of element.attributes) {
+                        htmlElem[attribute.attribute] = attribute.value;
+                    }
+                    li.append(htmlElem)
+                }
+                ul.append(li)
+            }
+            return ul;
+        }
+
+        function create_timer(name, totalSeconds, running = false, resettable = false, timeLeft = totalSeconds) {
+            const timerDiv = document.createElement("div");
+            const closeButt = document.createElement("button");
+            const resetButt = document.createElement("button");
+            const timerGuts = document.createElement("div");
+            const progressBar = document.createElement("div");
+            const progressButt = document.createElement("button");
+            const progressCanvas = document.createElement("canvas");
+            const timerName = document.createElement("input");
+            const timerInputs = document.createElement("div");
+
+            const secsInHour = 3600;
+            const secsInMin = 60;
+            let hours, minutes, seconds;
+            let context;
+            let inputValues;
+            let timerKiller, animeKiller;
+            let incButts;
+
+            seconds = totalSeconds;
+            hours = String(Math.floor(seconds / secsInHour)).padStart(2, '0');
+            seconds %= secsInHour;
+            minutes = String(Math.floor(seconds / secsInMin)).padStart(2, '0');
+            seconds = String(seconds % secsInMin).padStart(2, '0');
+
+            const inputs = create_ul(3, [
+                [
+                    { type: "input", attributes: [{ attribute: "type", value: "tel" }, { attribute: "spellcheck", value: false }, { attribute: "value", value: hours }] },
+                    { type: "span", attributes: [{ attribute: "innerText", value: ":" }] }
+                ],
+                [
+                    { type: "input", attributes: [{ attribute: "type", value: "tel" }, { attribute: "spellcheck", value: false }, { attribute: "value", value: minutes }] },
+                    { type: "span", attributes: [{ attribute: "innerText", value: ":" }] }
+                ],
+                [
+                    { type: "input", attributes: [{ attribute: "type", value: "tel" }, { attribute: "spellcheck", value: false }, { attribute: "value", value: seconds }] },
+                ]
+            ]);
+
+            const timerTimer = create_ul(3, [
+                [
+                    { type: "p", attributes: [{ attribute: "innerText", value: "00" }] },
+                    { type: "span", attributes: [{ attribute: "innerText", value: ":" }] }
+                ],
+                [
+                    { type: "p", attributes: [{ attribute: "innerText", value: "01" }] },
+                    { type: "span", attributes: [{ attribute: "innerText", value: ":" }] }
+                ],
+                [
+                    { type: "p", attributes: [{ attribute: "innerText", value: "00" }] },
+                ]
+            ]);
+
+            const labels = create_ul(3, [
+                [
+                    { type: "p", attributes: [{ attribute: "innerText", value: "hour" }] }
+                ],
+                [
+                    { type: "p", attributes: [{ attribute: "innerText", value: "min" }] }
+                ],
+                [
+                    { type: "p", attributes: [{ attribute: "innerText", value: "sec" }] }
+                ]
+            ]);
+
+            const timerIncs = create_ul(3, [
+                [
+                    { type: "button", attributes: [{ attribute: "innerText", value: "+10" }] },
+                    { type: "p", attributes: [{ attribute: "innerText", value: "min" }] }
+                ],
+                [
+                    { type: "button", attributes: [{ attribute: "innerText", value: "+1" }] },
+                    { type: "p", attributes: [{ attribute: "innerText", value: "min" }] }
+                ],
+                [
+                    { type: "button", attributes: [{ attribute: "innerText", value: "+15" }] },
+                    { type: "p", attributes: [{ attribute: "innerText", value: "sec" }] }
+                ]
+            ]);
+
+            closeButt.addEventListener("click", () => {
+                const timersContainer = closeButt.parentElement.parentElement;
+                const timerComponent = closeButt.parentElement;
+                let index;
+                
+                index = timers.indexOf(timers.filter(tim => tim.markup == timerComponent)[0]);
+                timers.splice(index, 1);
+                timersContainer.removeChild(timerComponent);
+            });
+
+            inputValues = [...inputs.querySelectorAll("input")];
+
+            inputValues.forEach((input, index) => {
+                input.addEventListener("input", () => {
+                    if (input.value.length > 2)
+                        input.value = input.value.substring(0, 2);
+                    if (isNaN(Number(input.value)))
+                        input.value = '00';
+                });
+                input.addEventListener("change", () => {
+                    let maxValue, secs;
+
+                    maxValue = index ? 59 : 99;
+                    if (input.value > maxValue)
+                        input.value = maxValue;
+                    input.value = String(input.value).padStart(2, '0');           
+                    
+                    secs = 3600;
+                    totalSeconds = 0;
+                    for (let value of inputValues) {
+                        totalSeconds += secs * value.value;
+                        secs /= 60;
+                    }
+                });
+            });
+
+            timerName.addEventListener("change", () => {
+                name = timerName.value;
+            });
+
+            function update_inputs(seconds) {
+                const inputElements = inputs.querySelectorAll("input");
+
+                hours = String(Math.floor(seconds / secsInHour)).padStart(2, '0');
+                seconds %= secsInHour;
+                minutes = String(Math.floor(seconds / secsInMin)).padStart(2, '0');
+                seconds = String(seconds % secsInMin).padStart(2, '0');
+
+                inputElements[0].value = hours;
+                inputElements[1].value = minutes;
+                inputElements[2].value = seconds;
+            }
+
+            function update_digits(seconds) {
+                const timeElements = timerTimer.querySelectorAll("p");
+
+                hours = String(Math.floor(seconds / secsInHour)).padStart(2, '0');
+                seconds %= secsInHour;
+                minutes = String(Math.floor(seconds / secsInMin)).padStart(2, '0');
+                seconds = String(seconds % secsInMin).padStart(2, '0');
+
+                timeElements[0].innerText = hours;
+                timeElements[1].innerText = minutes;
+                timeElements[2].innerText = seconds;
+            }
+
+            progressButt.addEventListener("click", () => {
+                progressButt.style.backgroundImage = `url(images/${running ? "play.png" : "pause.png"})`;
+
+                if (!resettable) {
+                    update_digits(totalSeconds);
+
+                    resettable = true;
+                    timerTimer.style.display = "flex";
+                    inputs.style.display = "none";
+                    timeLeft = totalSeconds;
+                }
+
+                if (!running) {
+                    run_timer();
+                    draw_progress_bar();
+                }
+                else {
+                    clearTimeout(timerKiller);
+                    cancelAnimationFrame(animeKiller);
+                }
+
+                running = !running;
+            });
+
+            function draw_progress_bar() {
+                context.clearRect(0, 0, progressCanvas.width, progressCanvas.height);
+
+                context.beginPath();
+                context.strokeStyle = "rgb(250, 255, 215)";
+                context.arc(progressCanvas.width / 2, progressCanvas.height / 2, 70, 0, Math.PI * 2);
+                context.stroke();
+
+                if (timeLeft > 0) {
+                    context.beginPath();
+                    context.strokeStyle = "rgb(125, 175, 245)";
+                    context.arc(progressCanvas.width / 2, progressCanvas.height / 2, 70, -Math.PI / 2, map(timeLeft, 0, totalSeconds, - Math.PI / 2, 3 * Math.PI / 2));
+                    context.stroke();
+                }
+
+                animeKiller = requestAnimationFrame(draw_progress_bar);
+            }
+
+            function run_timer() {
+                if (timeLeft >= 0)
+                    update_digits(timeLeft--);
+                timerKiller = setTimeout(run_timer, 1000);
+            }
+
+            incButts = [...timerIncs.querySelectorAll("button")];
+            incButts.forEach((button, index) => button.addEventListener("click", () => {
+                switch (index) {
+                    case 0: 
+                        totalSeconds += running ? 0 : 600;
+                        timeLeft += 600;
+                        break;
+                    case 1: 
+                        totalSeconds += running ? 0 : 60;
+                        timeLeft += 60;
+                        break;
+                    case 2:
+                        totalSeconds += running ? 0 : 15;
+                        timeLeft += 15;
+                        break;
+                }
+                update_inputs(totalSeconds);
+                update_digits(timeLeft);
+            }));
+
+            resetButt.addEventListener("click", () => {
+                resettable = false;
+                running = false;
+                timerTimer.style.display = "none";
+                inputs.style.display = "flex";
+
+                timeLeft = totalSeconds;
+                update_inputs(totalSeconds);
+                clearTimeout(timerKiller);
+                progressButt.style.backgroundImage = "url(images/play.png)";
+            });
+
+            timerDiv.classList.add("timer");
+            closeButt.classList.add("close");
+            resetButt.classList.add("reset");
+            timerGuts.classList.add("timer-guts");
+
+            progressBar.classList.add("progress-bar");
+            progressCanvas.width = 150;
+            progressCanvas.height = 150;
+            context = progressCanvas.getContext("2d");
+            context.lineWidth = 7;
+            context.beginPath();
+            context.strokeStyle = "rgb(125, 175, 245)";
+            context.arc(progressCanvas.width / 2, progressCanvas.height / 2, 70, 0, Math.PI * 2);
+            context.stroke();
+
+            timerName.classList.add("timer-name");
+            timerName.type = "text";
+            timerName.value = name;
+
+            timerInputs.classList.add("timer-inputs");
+            inputs.classList.add("inputs");
+            timerTimer.classList.add("timer-timer");
+            timerTimer.style.display = "none";
+            labels.classList.add("labels");
+
+            timerIncs.classList.add("timer-increments");
+
+            timerInputs.append(inputs);
+            timerInputs.append(timerTimer);
+            timerInputs.append(labels);
+
+            progressBar.append(progressButt);
+            progressBar.append(progressCanvas);
+
+            timerGuts.append(progressBar);
+            timerGuts.append(timerName);
+            timerGuts.append(timerInputs);
+            timerGuts.append(timerIncs);
+
+            timerDiv.append(closeButt);
+            timerDiv.append(resetButt);
+            timerDiv.append(timerGuts);
+
+            return { markup : timerDiv/*, timerData : { name, seconds, running, resettable, timeLeft }*/ };
+        }
+
+        return { switch_to_timer };
+    }
+)();
+
+timer.addEventListener("click", () => {
+    clockObj.kill_clock();
+    clear();
+    timerObj.switch_to_timer();
+});
+
+//-----------------------------------------------------
+
 function map(value, start1, end1, start2, end2) {
     return start2 + (end2 - start2) * (value - start1) / (end1 - start1);
 }
@@ -91,7 +430,7 @@ let clockObj = (
                 angleInc = Math.PI * 2 / circles;
                 minRad = 1;
                 maxRad = 6;
-                
+
                 iconContext.clearRect(0, 0, canvas.width, canvas.height);
                 for (let i = 0; i < circles; i++, angle += angleInc) {
                     let radius;
@@ -227,7 +566,7 @@ let clockObj = (
 
         function draw_arrow(canvas, arrow, width, height, angle) {
             let context;
-        
+
             context = canvas.getContext("2d");
             context.save();
             context.translate(canvas.width / 2, canvas.height / 2);
@@ -236,7 +575,7 @@ let clockObj = (
             context.restore();
         }
 
-        function start_clock() {
+        function switch_to_clock() {
             kill_clock();
             time.innerHTML = '';
             append_clock();
@@ -246,35 +585,18 @@ let clockObj = (
                 run_digital_clock();
         }
 
-        return { start_clock, kill_clock };
+        return { switch_to_clock, kill_clock };
     }
 )();
 
-//clockObj.start_clock();
+clockObj.switch_to_clock();
 
 clock.addEventListener("click", () => {
     clear();
-    clockObj.start_clock();
+    clockObj.switch_to_clock();
 });
 
 //--------------------------------------------------------------
-
-let timerObj = (
-    () => {
-        return {};
-    }
-)();
-
-timer.addEventListener("click", () => {
-    const h1 = document.createElement("h1");
-
-    clear();
-    h1.innerText = "Sneed";
-    mainSection.append(h1);
-
-    clockObj.kill_clock();
-
-});
 
 stopwatch.addEventListener("click", () => {
     const h1 = document.createElement("h1");

@@ -3,6 +3,10 @@ const timer = document.getElementById("timer-butt");
 const stopwatch = document.getElementById("stopwatch-butt");
 const mainSection = document.getElementById("main-section");
 
+function map(value, start1, end1, start2, end2) {
+    return start2 + (end2 - start2) * (value - start1) / (end1 - start1);
+}
+
 let timerObj = (
     () => {
         const timersContainer = document.createElement("div");
@@ -71,11 +75,15 @@ let timerObj = (
 
             const secsInHour = 3600;
             const secsInMin = 60;
+
             let hours, minutes, seconds;
             let context;
             let inputValues;
             let timerKiller, animeKiller;
             let incButts;
+            let totalRunning;
+            // let start, end, paused;
+            let angle, angleInc;
 
             seconds = totalSeconds;
             hours = String(Math.floor(seconds / secsInHour)).padStart(2, '0');
@@ -178,8 +186,9 @@ let timerObj = (
                 name = timerName.value;
             });
 
-            function update_inputs(seconds) {
+            function update(seconds) {
                 const inputElements = inputs.querySelectorAll("input");
+                const timeElements = timerTimer.querySelectorAll("p");
 
                 hours = String(Math.floor(seconds / secsInHour)).padStart(2, '0');
                 seconds %= secsInHour;
@@ -189,15 +198,6 @@ let timerObj = (
                 inputElements[0].value = hours;
                 inputElements[1].value = minutes;
                 inputElements[2].value = seconds;
-            }
-
-            function update_digits(seconds) {
-                const timeElements = timerTimer.querySelectorAll("p");
-
-                hours = String(Math.floor(seconds / secsInHour)).padStart(2, '0');
-                seconds %= secsInHour;
-                minutes = String(Math.floor(seconds / secsInMin)).padStart(2, '0');
-                seconds = String(seconds % secsInMin).padStart(2, '0');
 
                 timeElements[0].innerText = hours;
                 timeElements[1].innerText = minutes;
@@ -208,17 +208,22 @@ let timerObj = (
                 progressButt.style.backgroundImage = `url(images/${running ? "play.png" : "pause.png"})`;
 
                 if (!resettable) {
-                    update_digits(totalSeconds);
+                    update(totalSeconds);
 
                     resettable = true;
                     timerTimer.style.display = "flex";
                     inputs.style.display = "none";
                     timeLeft = totalSeconds;
+                    totalRunning = totalSeconds;
+                    // start = new Date();
+                    // end = new Date(start.getTime() + totalSeconds * 1000);
+                    angle = 0;
+                    angleInc = Math.PI * 2 / (totalSeconds * 60);
                 }
 
                 if (!running) {
                     run_timer();
-                    draw_progress_bar();
+                    draw_progress_bar(0);
                 }
                 else {
                     clearTimeout(timerKiller);
@@ -231,16 +236,26 @@ let timerObj = (
             function draw_progress_bar() {
                 context.clearRect(0, 0, progressCanvas.width, progressCanvas.height);
 
-                context.beginPath();
-                context.strokeStyle = "rgb(250, 255, 215)";
-                context.arc(progressCanvas.width / 2, progressCanvas.height / 2, 70, 0, Math.PI * 2);
-                context.stroke();
-
-                if (timeLeft > 0) {
+                if (timeLeft >= 0) {
+                    context.beginPath();
+                    context.strokeStyle = "rgb(250, 255, 215)";
+                    context.arc(progressCanvas.width / 2, progressCanvas.height / 2, 70, 0, Math.PI * 2);
+                    context.stroke();
+                    //let angle = map(new Date().getTime(), start.getTime(), end.getTime(), - Math.PI / 2, 3 * Math.PI / 2);
                     context.beginPath();
                     context.strokeStyle = "rgb(125, 175, 245)";
-                    context.arc(progressCanvas.width / 2, progressCanvas.height / 2, 70, -Math.PI / 2, map(timeLeft, 0, totalSeconds, - Math.PI / 2, 3 * Math.PI / 2));
+                    context.arc(progressCanvas.width / 2, progressCanvas.height / 2, 70, - Math.PI / 2, angle - Math.PI / 2);
                     context.stroke();
+                    angle += angleInc;
+                }
+                else {
+                    let red, green, blue;
+
+                    red = Math.floor(Math.random() * 255);
+                    green = Math.floor(Math.random() * 255);
+                    blue = Math.floor(Math.random() * 255);
+                    context.fillStyle = `rgb(${red}, ${green}, ${blue})`;
+                    context.arc(progressCanvas.width / 2, progressCanvas.height / 2, 70, 0, Math.PI * 2);
                 }
 
                 animeKiller = requestAnimationFrame(draw_progress_bar);
@@ -248,28 +263,29 @@ let timerObj = (
 
             function run_timer() {
                 if (timeLeft >= 0)
-                    update_digits(timeLeft--);
+                    update(timeLeft--);
                 timerKiller = setTimeout(run_timer, 1000);
             }
 
             incButts = [...timerIncs.querySelectorAll("button")];
             incButts.forEach((button, index) => button.addEventListener("click", () => {
+                let timeAdded;
                 switch (index) {
                     case 0: 
-                        totalSeconds += running ? 0 : 600;
-                        timeLeft += 600;
+                        timeAdded = 600;
                         break;
                     case 1: 
-                        totalSeconds += running ? 0 : 60;
-                        timeLeft += 60;
+                        timeAdded = 60;
                         break;
                     case 2:
-                        totalSeconds += running ? 0 : 15;
-                        timeLeft += 15;
+                        timeAdded = 15;
                         break;
                 }
-                update_inputs(totalSeconds);
-                update_digits(timeLeft);
+                angle = 2 * Math.PI * (totalRunning - timeLeft) / (totalRunning + timeAdded);
+                angleInc = Math.PI * 2 / ((totalRunning + timeAdded) * 60);
+                running ? (totalRunning += timeAdded) : (totalSeconds += timeAdded);
+                timeLeft += timeAdded;
+                running ? update(timeLeft) : update(totalSeconds);
             }));
 
             resetButt.addEventListener("click", () => {
@@ -279,9 +295,17 @@ let timerObj = (
                 inputs.style.display = "flex";
 
                 timeLeft = totalSeconds;
-                update_inputs(totalSeconds);
+                totalRunning = totalSeconds;
+                update(totalSeconds);
                 clearTimeout(timerKiller);
+                cancelAnimationFrame(animeKiller);
                 progressButt.style.backgroundImage = "url(images/play.png)";
+                
+                context.clearRect(0, 0, progressCanvas.width, progressCanvas.height);
+                context.beginPath();
+                context.strokeStyle = "rgb(250, 255, 215)";
+                context.arc(progressCanvas.width / 2, progressCanvas.height / 2, 70, 0, Math.PI * 2);
+                context.stroke();
             });
 
             timerDiv.classList.add("timer");
@@ -295,7 +319,7 @@ let timerObj = (
             context = progressCanvas.getContext("2d");
             context.lineWidth = 7;
             context.beginPath();
-            context.strokeStyle = "rgb(125, 175, 245)";
+            context.strokeStyle = "rgb(250, 255, 215)";
             context.arc(progressCanvas.width / 2, progressCanvas.height / 2, 70, 0, Math.PI * 2);
             context.stroke();
 
@@ -327,7 +351,7 @@ let timerObj = (
             timerDiv.append(resetButt);
             timerDiv.append(timerGuts);
 
-            return { markup : timerDiv/*, timerData : { name, seconds, running, resettable, timeLeft }*/ };
+            return { markup : timerDiv };
         }
 
         return { switch_to_timer };
@@ -341,10 +365,6 @@ timer.addEventListener("click", () => {
 });
 
 //-----------------------------------------------------
-
-function map(value, start1, end1, start2, end2) {
-    return start2 + (end2 - start2) * (value - start1) / (end1 - start1);
-}
 
 let clockObj = (
     () => {

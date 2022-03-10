@@ -85,6 +85,12 @@
     position: relative;
 }
 
+.progress-bar canvas {
+    border-radius: 10px;
+    /* box-shadow : 0 5px 10px 3px rgb(163, 147, 147); */
+    box-shadow: none;
+}
+
 .progress-bar button {
     width: 76px;
     height: 76px;

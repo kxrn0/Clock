@@ -7,6 +7,29 @@ function map(value, start1, end1, start2, end2) {
     return start2 + (end2 - start2) * (value - start1) / (end1 - start1);
 }
 
+let stopwatchObj = (
+    () => {
+
+    }
+)();
+
+stopwatch.addEventListener("click", () => {
+    const h1 = document.createElement("h1");
+
+    clear();
+    h1.innerText = "Feed";
+    mainSection.append(h1);
+
+    clockObj.kill_clock();
+});
+
+//---------------------------------------------------
+
+
+/**
+ * fix the progress bar bug
+ */
+
 let timerObj = (
     () => {
         const timersContainer = document.createElement("div");
@@ -79,11 +102,12 @@ let timerObj = (
             let hours, minutes, seconds;
             let context;
             let inputValues;
-            let timerKiller, animeKiller;
+            let timerKiller, animeKiller, edKiller, audioKiller;
             let incButts;
             let totalRunning;
-            // let start, end, paused;
             let angle, angleInc;
+            let color;
+            let audio;
 
             seconds = totalSeconds;
             hours = String(Math.floor(seconds / secsInHour)).padStart(2, '0');
@@ -154,6 +178,7 @@ let timerObj = (
                 index = timers.indexOf(timers.filter(tim => tim.markup == timerComponent)[0]);
                 timers.splice(index, 1);
                 timersContainer.removeChild(timerComponent);
+                kill_many();
             });
 
             inputValues = [...inputs.querySelectorAll("input")];
@@ -205,90 +230,135 @@ let timerObj = (
             }
 
             progressButt.addEventListener("click", () => {
-                progressButt.style.backgroundImage = `url(images/${running ? "play.png" : "pause.png"})`;
+                if (timeLeft >= 0) {
+                    progressButt.style.backgroundImage = `url(images/${running ? "play.png" : "pause.png"})`;
 
-                if (!resettable) {
-                    update(totalSeconds);
+                    if (!resettable) {
+                        update(totalSeconds);
 
-                    resettable = true;
-                    timerTimer.style.display = "flex";
-                    inputs.style.display = "none";
-                    timeLeft = totalSeconds;
-                    totalRunning = totalSeconds;
-                    // start = new Date();
-                    // end = new Date(start.getTime() + totalSeconds * 1000);
-                    angle = 0;
-                    angleInc = Math.PI * 2 / (totalSeconds * 60);
+                        resettable = true;
+                        timerTimer.style.display = "flex";
+                        inputs.style.display = "none";
+                        timeLeft = totalSeconds;
+                        totalRunning = totalSeconds;
+                        angle = 0;
+                        angleInc = Math.PI * 2 / (totalSeconds * 60);
+                        dt = 0;
+                        color = 0;
+                        audio = new Audio("alarm.wav");
+                    }
+
+                    if (!running) {
+                        run_timer();
+                        draw_progress_bar(0);
+                    }
+                    else {
+                        clearTimeout(timerKiller);
+                        cancelAnimationFrame(animeKiller);
+                    }
+
+                    running = !running;
                 }
-
-                if (!running) {
-                    run_timer();
-                    draw_progress_bar(0);
-                }
-                else {
-                    clearTimeout(timerKiller);
-                    cancelAnimationFrame(animeKiller);
-                }
-
-                running = !running;
+                else
+                    great_reset();
             });
+
+            function kill_many() {
+                audio.pause();
+                clearTimeout(timerKiller);
+                cancelAnimationFrame(animeKiller);
+                cancelAnimationFrame(edKiller);
+                clearTimeout(audioKiller);
+            }
 
             function draw_progress_bar() {
                 context.clearRect(0, 0, progressCanvas.width, progressCanvas.height);
 
                 if (timeLeft >= 0) {
+                    context.lineWidth = 7;
                     context.beginPath();
                     context.strokeStyle = "rgb(250, 255, 215)";
                     context.arc(progressCanvas.width / 2, progressCanvas.height / 2, 70, 0, Math.PI * 2);
                     context.stroke();
-                    //let angle = map(new Date().getTime(), start.getTime(), end.getTime(), - Math.PI / 2, 3 * Math.PI / 2);
                     context.beginPath();
                     context.strokeStyle = "rgb(125, 175, 245)";
                     context.arc(progressCanvas.width / 2, progressCanvas.height / 2, 70, - Math.PI / 2, angle - Math.PI / 2);
                     context.stroke();
                     angle += angleInc;
                 }
-                else {
-                    let red, green, blue;
-
-                    red = Math.floor(Math.random() * 255);
-                    green = Math.floor(Math.random() * 255);
-                    blue = Math.floor(Math.random() * 255);
-                    context.fillStyle = `rgb(${red}, ${green}, ${blue})`;
-                    context.arc(progressCanvas.width / 2, progressCanvas.height / 2, 70, 0, Math.PI * 2);
-                }
 
                 animeKiller = requestAnimationFrame(draw_progress_bar);
             }
 
+            function anime_ed() {
+                let distance, distInc;
+    
+                distance = 1;
+                distInc = 3;
+    
+                context.clearRect(0, 0, progressCanvas.width, progressCanvas.height);
+    
+                context.lineWidth = 4;
+                for (let i = 0; i < 35; i++, distance += distInc) {
+                    context.strokeStyle = `hsl(${(i * 5 + color) % 360}, 100%, 90%)`;
+                    context.beginPath();
+                    context.arc(progressCanvas.width / 2, progressCanvas.height / 2, distance, 0, Math.PI * 2);
+                    context.stroke();
+                }
+                color += 3;
+    
+                edKiller = requestAnimationFrame(anime_ed);
+            }
+
+            function play_audio() {
+                audio.play();
+                audioKiller = setTimeout(play_audio, 4000);
+            }
+
             function run_timer() {
-                if (timeLeft >= 0)
+                if (timeLeft >= 0) {
                     update(timeLeft--);
-                timerKiller = setTimeout(run_timer, 1000);
+                    timerKiller = setTimeout(run_timer, 1000);
+
+                    if (timeLeft < 0) {
+                        progressButt.style.backgroundImage = "url(images/check.png)";
+                        progressCanvas.style.boxShadow = "0 5px 10px 3px rgb(163, 147, 147)";
+                        anime_ed();
+                        play_audio();
+                    }
+                }
+                else {
+                    clearTimeout(timerKiller);
+                    cancelAnimationFrame(animeKiller);
+                }
             }
 
             incButts = [...timerIncs.querySelectorAll("button")];
             incButts.forEach((button, index) => button.addEventListener("click", () => {
-                let timeAdded;
-                switch (index) {
-                    case 0: 
-                        timeAdded = 600;
-                        break;
-                    case 1: 
-                        timeAdded = 60;
-                        break;
-                    case 2:
-                        timeAdded = 15;
-                        break;
+                if (timeLeft >= 0) {
+                    let timeAdded;
+                    switch (index) {
+                        case 0:
+                            timeAdded = 600;
+                            break;
+                        case 1:
+                            timeAdded = 60;
+                            break;
+                        case 2:
+                            timeAdded = 15;
+                            break;
+                    }
+                    angle = 2 * Math.PI * (totalRunning - timeLeft) / (totalRunning + timeAdded);
+                    angleInc = Math.PI * 2 / ((totalRunning + timeAdded) * 60);
+                    resettable ? (totalRunning += timeAdded) : (totalSeconds += timeAdded);
+                    timeLeft += timeAdded;
+                    running ? update(timeLeft) : update(totalSeconds);
                 }
-                angle = 2 * Math.PI * (totalRunning - timeLeft) / (totalRunning + timeAdded);
-                angleInc = Math.PI * 2 / ((totalRunning + timeAdded) * 60);
-                running ? (totalRunning += timeAdded) : (totalSeconds += timeAdded);
-                timeLeft += timeAdded;
-                running ? update(timeLeft) : update(totalSeconds);
             }));
 
-            resetButt.addEventListener("click", () => {
+            resetButt.addEventListener("click", great_reset);
+
+            function great_reset() {
                 resettable = false;
                 running = false;
                 timerTimer.style.display = "none";
@@ -297,8 +367,9 @@ let timerObj = (
                 timeLeft = totalSeconds;
                 totalRunning = totalSeconds;
                 update(totalSeconds);
-                clearTimeout(timerKiller);
-                cancelAnimationFrame(animeKiller);
+                kill_many();
+                context.lineWidth = 7;
+                progressCanvas.style.boxShadow = "none";
                 progressButt.style.backgroundImage = "url(images/play.png)";
                 
                 context.clearRect(0, 0, progressCanvas.width, progressCanvas.height);
@@ -306,7 +377,8 @@ let timerObj = (
                 context.strokeStyle = "rgb(250, 255, 215)";
                 context.arc(progressCanvas.width / 2, progressCanvas.height / 2, 70, 0, Math.PI * 2);
                 context.stroke();
-            });
+
+            }
 
             timerDiv.classList.add("timer");
             closeButt.classList.add("close");
@@ -457,11 +529,11 @@ let clockObj = (
 
                     radius = minRad + Math.abs(maxRad * Math.sin(map(dt % circles, 0, circles, 0, Math.PI * 2) + i * Math.PI * 3 / circles));
                     iconContext.beginPath();
-                    iconContext.fillStyle = `hsl(${map(i + color, 0, circles, 0, 360)}, 100%, 50%)`;
+                    iconContext.fillStyle = `hsl(${(i * 10 + color) % 360}, 100%, 50%)`;
                     iconContext.arc(distance * Math.cos(angle) + iconCanvas.width / 2, distance * Math.sin(angle) + iconCanvas.height / 2, radius, 0, Math.PI * 2);
                     iconContext.fill();
                 }
-                color += .25;
+                color += 1;
                 dt += .1;
 
                 animeKiller = requestAnimationFrame(loading_icon);
@@ -617,17 +689,6 @@ clock.addEventListener("click", () => {
 });
 
 //--------------------------------------------------------------
-
-stopwatch.addEventListener("click", () => {
-    const h1 = document.createElement("h1");
-
-    clear();
-    h1.innerText = "Feed";
-    mainSection.append(h1);
-
-    clockObj.kill_clock();
-
-});
 
 function clear() {
     mainSection.innerHTML = '';

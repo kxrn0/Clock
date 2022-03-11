@@ -5,8 +5,10 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <link rel="stylesheet" href="normalize.css"> -->
     <link rel="stylesheet" href="clock_style.css">
     <link rel="stylesheet" href="timer_style.css">
+    <link rel="stylesheet" href="stopwatch_style.css">
     <script src="main.js" defer></script>
     <!-- 
         play : <a href="https://www.flaticon.com/free-icons/play-button" title="play-button icons">Play-button icons created by Freepik - Flaticon</a>
@@ -16,6 +18,8 @@
         close: <a href="https://www.flaticon.com/free-icons/close" title="close icons">Close icons created by Freepik - Flaticon</a>
         plus: <a href="https://www.flaticon.com/free-icons/plus" title="plus icons">Plus icons created by iconeveryting - Flaticon</a>
         reset : <a href="https://www.flaticon.com/free-icons/change" title="change icons">Change icons created by Freepik - Flaticon</a>
+        lap : <a href="https://www.flaticon.com/free-icons/stopwatch" title="stopwatch icons">Stopwatch icons created by Freepik - Flaticon</a>
+        alarm : Music by <a href="/users/sergequadrado-24990007/?tab=audio&amp;utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=audio&amp;utm_content=21301">SergeQuadrado</a> from <a href="https://pixabay.com/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=music&amp;utm_content=21301">Pixabay</a>
     -->
     <title>Time</title>
 </head>
@@ -31,6 +35,26 @@
             </ul>
         </nav>
         <section id="main-section">
+            <div class="watch-container">
+                <div class="watch-digits">
+                    <p>00:23:34</p>
+                    <sub>32</sub>
+                </div>
+                <div class="watch-buttons">
+                    <ul>
+                        <li id="watch-start"><button></button></li>
+                        <li id="watch-lap"><button></button></li>
+                        <li id="watch-reset"><button></button></li>
+                    </ul>
+                </div>
+                <div class="watch-laps">
+                    <ul>
+                        <li><span class="lap-order">#1</span><span class="lap-time">00:23 <sub>13</sub></span><span class="lap-duration">00:12<sub>25</sub></span></li>
+                        <li><span class="lap-order">#2</span><span class="lap-time">00:23 <sub>17</sub></span><span class="lap-duration">00:12<sub>43</sub></span></li>
+                        <li><span class="lap-order">#3</span><span class="lap-time">00:23 <sub>34</sub></span><span class="lap-duration">00:12<sub>13</sub></span></li>
+                    </ul>
+                </div>
+            </div>
         </section>
     </main>
 </body>

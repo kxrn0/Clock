@@ -1,0 +1,175 @@
+.watch-container {
+    width: 600px;
+    margin: 50px auto;
+    background: rgb(223, 223, 175);
+    border-radius: 10px;
+}
+
+.watch-buttons ul {
+    list-style: none;
+    display: flex;
+    margin: 10px;
+}
+
+.watch-digits {
+    display: flex;
+    justify-content: center;
+}
+
+.watch-digits p {
+    font-size: 6rem;
+}
+
+.watch-digits sub {
+    font-size: 2.5rem;
+    align-self: flex-end;
+}
+
+/* .watch-digits ul {
+    justify-content: center;
+} */
+
+/* .watch-digits {
+    justify-content: center;
+} */
+
+/* .watch-digits li {
+    display: flex;
+    font-size: 6rem;
+    justify-content: space-around;
+} */
+
+/* .watch-digits sub {
+    font-size: 2.5rem;
+    align-self: flex-end;
+} */
+
+.watch-buttons ul {
+    position: relative;
+}
+
+#watch-start button {
+    background: rgb(45, 245, 152);
+    background-image: url("images/play.png");
+    background-size: cover;
+}
+
+#watch-lap button {
+    background: rgb(245, 199, 113);
+    background-image: url("images/lap.png");
+    background-size: cover;
+}
+
+#watch-reset button {
+    background: rgb(243, 243, 64);
+    position: absolute;
+    right: 10px;
+    background-image: url("images/reset.png");
+    background-size: cover;
+}
+
+#watch-start button:hover {
+    background: rgb(38, 224, 138);
+    background-image: url("images/play.png");
+    background-size: cover;
+}
+
+#watch-lap button:hover {
+    background: rgb(233, 193, 107);
+    background-image: url("images/lap.png");
+    background-size: cover;
+}
+
+#watch-reset button:hover {
+    background: rgb(223, 223, 50);
+    background-image: url("images/reset.png");
+    background-size: cover;
+}
+
+/*  */
+#watch-start button:active {
+    background: rgb(33, 206, 148);
+    background-image: url("images/play.png");
+    background-size: cover;
+}
+
+#watch-lap button:active {
+    background: rgb(192, 182, 88);
+    background-image: url("images/lap.png");
+    background-size: cover;
+}
+
+#watch-reset button:active {
+    background: rgb(180, 204, 46);
+    background-image: url("images/reset.png");
+    background-size: cover;
+}
+
+.watch-buttons button {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin: 10px;
+    background-size: cover;
+    border: none;
+}
+
+.watch-buttons button:hover {
+    transform: scale(1.015);
+}
+
+.watch-buttons button:active {
+    transform: scale(.99);
+}
+
+.watch-laps ul {
+    list-style: none;
+    font-size: 1.5rem;
+    padding: 10px;
+}
+
+.watch-laps li {
+    display: flex;
+    justify-content: space-around;
+}
+
+.watch-laps sub {
+    font-size: 1rem;
+}
+
+@media screen and (max-width: 600px) {
+    .watch-container {
+        width: 300px;
+        margin: 25px auto;
+    }
+    
+    .watch-buttons ul {
+        margin: 5px;
+    }
+
+    .watch-digits p {
+        font-size: 3.5rem;
+    }
+    
+    .watch-digits sub {
+        font-size: 1.5rem;
+    }
+    
+    #watch-reset button {
+        right: 5px;
+    }
+    
+    .watch-buttons button {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .watch-laps ul {
+        font-size: 1.25rem;
+        padding: 5px;
+    }
+    
+    .watch-laps sub {
+        font-size: .75rem;
+    }
+}

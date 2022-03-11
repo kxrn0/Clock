@@ -7,9 +7,30 @@ function map(value, start1, end1, start2, end2) {
     return start2 + (end2 - start2) * (value - start1) / (end1 - start1);
 }
 
+function create_ul(items, content) {
+    const ul = document.createElement("ul");
+
+    for (let i = 0; i < items; i++) {
+        const li = document.createElement("li");
+
+        for (let element of content[i]) {
+            const htmlElem = document.createElement(element.type);
+
+            for (let attribute of element.attributes) {
+                htmlElem[attribute.attribute] = attribute.value;
+            }
+            li.append(htmlElem)
+        }
+        ul.append(li)
+    }
+    return ul;
+}
+
 let stopwatchObj = (
     () => {
-
+        const container = document.createElement("div");
+        const digits = document.createElement("div");
+        const 
     }
 )();
 
@@ -24,7 +45,6 @@ stopwatch.addEventListener("click", () => {
 });
 
 //---------------------------------------------------
-
 
 /**
  * fix the progress bar bug
@@ -66,25 +86,6 @@ let timerObj = (
             mainSection.append(timersContainer)
         }
 
-        function create_ul(items, content) {
-            const ul = document.createElement("ul");
-
-            for (let i = 0; i < items; i++) {
-                const li = document.createElement("li");
-
-                for (let element of content[i]) {
-                    const htmlElem = document.createElement(element.type);
-
-                    for (let attribute of element.attributes) {
-                        htmlElem[attribute.attribute] = attribute.value;
-                    }
-                    li.append(htmlElem)
-                }
-                ul.append(li)
-            }
-            return ul;
-        }
-
         function create_timer(name, totalSeconds, running = false, resettable = false, timeLeft = totalSeconds) {
             const timerDiv = document.createElement("div");
             const closeButt = document.createElement("button");
@@ -108,6 +109,8 @@ let timerObj = (
             let angle, angleInc;
             let color;
             let audio;
+
+            audio = new Audio("alarm_sound.mp3");
 
             seconds = totalSeconds;
             hours = String(Math.floor(seconds / secsInHour)).padStart(2, '0');
@@ -245,7 +248,6 @@ let timerObj = (
                         angleInc = Math.PI * 2 / (totalSeconds * 60);
                         dt = 0;
                         color = 0;
-                        audio = new Audio("alarm.wav");
                     }
 
                     if (!running) {
@@ -312,7 +314,7 @@ let timerObj = (
 
             function play_audio() {
                 audio.play();
-                audioKiller = setTimeout(play_audio, 4000);
+                audioKiller = setTimeout(play_audio, 1000);
             }
 
             function run_timer() {
@@ -681,7 +683,7 @@ let clockObj = (
     }
 )();
 
-clockObj.switch_to_clock();
+//clockObj.switch_to_clock();
 
 clock.addEventListener("click", () => {
     clear();

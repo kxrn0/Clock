@@ -1,0 +1,59 @@
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font: inherit;
+}
+
+body {
+    background: rgb(239, 245, 228);
+    font-family: Helvetica;
+    color: darkslategrey;
+}
+
+/* NAV BAR */
+
+.nav-bar ul {
+    list-style: none;
+    background: rgb(230, 173, 100);
+    padding : 20px;
+    display: flex;
+    gap: 20px;
+    position : relative;
+}
+
+.nav-bar input[type="checkbox"] {
+    position: absolute;
+    right : 10px;
+}
+
+.nav-bar button {
+    padding: 10px;
+    font-size: 1.1rem;
+    background: rgb(236, 238, 121);
+    border: none;
+    border-radius: 5px;
+}
+
+.nav-bar button:hover {
+    background: rgb(200, 224, 112);
+}
+
+.nav-bar button:active {
+    background: rgb(206, 204, 105);
+    transform: scale(.99);
+}
+
+@media screen and (max-width: 500px) {
+    
+    /* NAV BAR */
+
+    .nav-bar ul {
+        padding : 10px;
+        gap: 10px;
+    }
+    
+    .nav-bar button {
+        font-size: 1.05rem;
+    }
+}

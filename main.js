@@ -3,6 +3,7 @@ const timer = document.getElementById("timer-butt");
 const stopwatch = document.getElementById("stopwatch-butt");
 const mainSection = document.getElementById("main-section");
 
+
 function map(value, start1, end1, start2, end2) {
     return start2 + (end2 - start2) * (value - start1) / (end1 - start1);
 }
@@ -28,20 +29,154 @@ function create_ul(items, content) {
 
 let stopwatchObj = (
     () => {
-        const container = document.createElement("div");
-        const digits = document.createElement("div");
-        const 
+        const watchContainer = document.createElement("div");
+        const digitsContainer = document.createElement("div");
+        const digits = document.createElement("p");
+        const subs = document.createElement("sub");
+        const lapsContainer = document.createElement("div");
+        const laps = document.createElement("ul");
+        const buttsContainer = document.createElement("div");
+
+        const ulButts = create_ul(3, [
+            [
+                { type: "button", attributes: [{ attribute: "id", value: "watch-start" }] }
+            ],
+            [
+                { type: "button", attributes: [{ attribute: "id", value: "watch-lap" }] }
+            ],
+            [
+                { type: "button", attributes: [{ attribute: "id", value: "watch-reset" }] }
+            ]
+        ]);
+        const buttons = ulButts.querySelectorAll("button");
+        let running, watchKiller, totalCents;
+        let totalLaps, lapTime;
+
+        lapsContainer.append(laps);
+        buttsContainer.append(ulButts);
+        digitsContainer.append(digits);
+        digitsContainer.append(subs);
+        watchContainer.append(digitsContainer);
+        watchContainer.append(buttsContainer);
+        watchContainer.append(lapsContainer);
+
+        digits.innerText = "00:00:00";
+        subs.innerText = "00"
+
+        watchContainer.classList.add("watch-container");
+        digitsContainer.classList.add("watch-digits");
+        buttsContainer.classList.add("watch-buttons");
+        lapsContainer.classList.add("watch-laps");
+
+        buttons[0].addEventListener("click", () => {
+            if (running) {
+                buttons[0].id = "paused";
+                clearTimeout(watchKiller);
+            }
+            else {
+                buttons[0].id = "playing";
+                run_stopwatch();
+            }
+
+            running = !running;
+        });
+
+        buttons[1].addEventListener("click", () => {
+            if (running) {
+                const lapItem = document.createElement("li");
+                const lapOrder = document.createElement("span");
+                const lapLength = document.createElement("span");
+                const lapLengthSubs = document.createElement("sub");
+                const lapDuration = document.createElement("span");
+                const lapDurationSubs = document.createElement("sub");
+                let hours, minutes, seconds, centiseconds;
+                
+                ({ hours, minutes, seconds, centiseconds } = compute_values(totalCents));
+                lapOrder.innerText = `#${++totalLaps}`;
+                lapLength.innerText = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+                lapLengthSubs.innerText = String(centiseconds).padStart(2, '0');
+
+                ({ hours, minutes, seconds, centiseconds } = compute_values(lapTime));
+                lapDuration.innerText = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+                lapDurationSubs.innerText = String(centiseconds).padStart(2, '0');
+
+                lapItem.append(lapOrder);
+                lapItem.append(lapLength);
+                lapLength.append(lapLengthSubs);
+                lapItem.append(lapDuration);
+                lapDuration.append(lapDurationSubs);
+                laps.prepend(lapItem);
+
+                lapTime = 0;
+            }
+        });
+
+        buttons[2].addEventListener("click", () => {
+            clearTimeout(watchKiller);
+            totalCents = 0;
+            digits.innerText = "00:00:00";
+            subs.innerText = "00";
+            buttons[0].id = "paused";
+            running = false;
+            laps.innerHTML = '';
+            totalLaps = 0;
+            lapTime = 0;
+        });
+
+        function compute_values(centiseconds) {
+            const centsPerHour = 360000;
+            const centsPerMin = 6000;
+            const centsPerSec = 100;
+            let hours, minutes, seconds;
+
+            hours = Math.floor(centiseconds / centsPerHour);
+            centiseconds %= centsPerHour;
+            minutes = Math.floor(centiseconds / centsPerMin);
+            centiseconds %= centsPerMin;
+            seconds = Math.floor(centiseconds / centsPerSec);
+            centiseconds %= centsPerSec;
+            return { hours, minutes, seconds, centiseconds };            
+        }
+        
+        function run_stopwatch() {
+            let hours, minutes, seconds, centiseconds;
+            
+            ({ hours, minutes, seconds, centiseconds } = compute_values(totalCents));
+            digits.innerText = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            subs.innerText = String(centiseconds).padStart(2, '0');
+
+            totalCents++;
+            lapTime++;
+
+            watchKiller = setTimeout(run_stopwatch, 10);
+        }
+
+        function append_watch() {
+            mainSection.innerHTML = '';
+            mainSection.append(watchContainer);
+        }
+
+        function switch_to_stopwatch() {
+            append_watch();
+        }
+
+        function init() {
+            running = false;
+            buttons[0].id = "paused";
+            totalCents = 0;
+            lapTime = 0;
+            totalLaps = 0;
+        }
+
+        init();
+
+        return { switch_to_stopwatch };
     }
 )();
 
 stopwatch.addEventListener("click", () => {
-    const h1 = document.createElement("h1");
-
-    clear();
-    h1.innerText = "Feed";
-    mainSection.append(h1);
-
     clockObj.kill_clock();
+    stopwatchObj.switch_to_stopwatch();
 });
 
 //---------------------------------------------------
@@ -56,7 +191,7 @@ let timerObj = (
         const addTimer = document.createElement("div");
         const button = document.createElement("button");
         let timers
-        
+
         timers = [];
 
         addTimer.classList.add("add-timer");
@@ -64,7 +199,7 @@ let timerObj = (
 
         button.addEventListener("click", () => {
             let newTimer;
-            
+
             newTimer = create_timer(`Timer ${timers.length}`, 60);
             timers.push(newTimer);
             timersContainer.removeChild(addTimer);
@@ -80,6 +215,7 @@ let timerObj = (
         }
 
         function append_timers() {
+            mainSection.innerHTML = '';
             for (let tim of timers)
                 timersContainer.append(tim.markup);
             timersContainer.append(addTimer);
@@ -177,7 +313,7 @@ let timerObj = (
                 const timersContainer = closeButt.parentElement.parentElement;
                 const timerComponent = closeButt.parentElement;
                 let index;
-                
+
                 index = timers.indexOf(timers.filter(tim => tim.markup == timerComponent)[0]);
                 timers.splice(index, 1);
                 timersContainer.removeChild(timerComponent);
@@ -199,8 +335,8 @@ let timerObj = (
                     maxValue = index ? 59 : 99;
                     if (input.value > maxValue)
                         input.value = maxValue;
-                    input.value = String(input.value).padStart(2, '0');           
-                    
+                    input.value = String(input.value).padStart(2, '0');
+
                     secs = 3600;
                     totalSeconds = 0;
                     for (let value of inputValues) {
@@ -294,12 +430,12 @@ let timerObj = (
 
             function anime_ed() {
                 let distance, distInc;
-    
+
                 distance = 1;
                 distInc = 3;
-    
+
                 context.clearRect(0, 0, progressCanvas.width, progressCanvas.height);
-    
+
                 context.lineWidth = 4;
                 for (let i = 0; i < 35; i++, distance += distInc) {
                     context.strokeStyle = `hsl(${(i * 5 + color) % 360}, 100%, 90%)`;
@@ -308,7 +444,7 @@ let timerObj = (
                     context.stroke();
                 }
                 color += 3;
-    
+
                 edKiller = requestAnimationFrame(anime_ed);
             }
 
@@ -373,7 +509,7 @@ let timerObj = (
                 context.lineWidth = 7;
                 progressCanvas.style.boxShadow = "none";
                 progressButt.style.backgroundImage = "url(images/play.png)";
-                
+
                 context.clearRect(0, 0, progressCanvas.width, progressCanvas.height);
                 context.beginPath();
                 context.strokeStyle = "rgb(250, 255, 215)";
@@ -425,7 +561,7 @@ let timerObj = (
             timerDiv.append(resetButt);
             timerDiv.append(timerGuts);
 
-            return { markup : timerDiv };
+            return { markup: timerDiv };
         }
 
         return { switch_to_timer };
@@ -434,11 +570,10 @@ let timerObj = (
 
 timer.addEventListener("click", () => {
     clockObj.kill_clock();
-    clear();
     timerObj.switch_to_timer();
 });
 
-//-----------------------------------------------------
+//---------------------------------------------------
 
 let clockObj = (
     () => {
@@ -638,6 +773,7 @@ let clockObj = (
         }
 
         function append_clock() {
+            mainSection.innerHTML = '';
             mainSection.append(quoteContainer);
             mainSection.append(timeWarper);
         }
@@ -683,15 +819,8 @@ let clockObj = (
     }
 )();
 
-//clockObj.switch_to_clock();
+clockObj.switch_to_clock();
 
 clock.addEventListener("click", () => {
-    clear();
     clockObj.switch_to_clock();
 });
-
-//--------------------------------------------------------------
-
-function clear() {
-    mainSection.innerHTML = '';
-}

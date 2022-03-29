@@ -141,8 +141,6 @@
 .timer-guts ul input[type="tel"] {
     width: 75px;
     text-align: center;
-    /* background: var(--timer-guts-input-bg);
-    color: var(--timer-guts-input-color); */
     border: none;
     padding: 5px;
     font-size: 2.5rem;

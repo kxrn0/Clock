@@ -8,4 +8,4 @@
         reset : <a href="https://www.flaticon.com/free-icons/change" title="change icons">Change icons created by Freepik - Flaticon</a>
         lap : <a href="https://www.flaticon.com/free-icons/stopwatch" title="stopwatch icons">Stopwatch icons created by Freepik - Flaticon</a>
         alarm : Music by <a href="/users/sergequadrado-24990007/?tab=audio&amp;utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=audio&amp;utm_content=21301">SergeQuadrado</a> from <a href="https://pixabay.com/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=music&amp;utm_content=21301">Pixabay</a>
-    
+        favicon.ico : <a href="https://www.flaticon.com/free-icons/clock" title="clock icons">Clock icons created by Freepik - Flaticon</a>

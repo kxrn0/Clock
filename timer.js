@@ -164,6 +164,11 @@ export const timerObj = (
                 });
             });
 
+            /**
+             * If it is paused, the p elements reset back to the original time. I should update them too.
+             * 
+             */
+
             function update(seconds) {
                 const inputElements = inputs.querySelectorAll("input");
                 const timeElements = timerTimer.querySelectorAll("p");
@@ -299,7 +304,7 @@ export const timerObj = (
                     }
                     resettable ? (totalRunning += timeAdded) : (totalSeconds += timeAdded);
                     timeLeft += timeAdded;
-                    running ? update(timeLeft) : update(totalSeconds);
+                    update(timeLeft);
                 }
             }));
 

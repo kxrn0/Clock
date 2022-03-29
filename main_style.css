@@ -1,3 +1,5 @@
+/* NAV BAR */
+
 *, *::before, *::after {
     margin: 0;
     padding: 0;
@@ -5,55 +7,146 @@
     font: inherit;
 }
 
+:root.light {
+    --nav-bg: rgb(242, 176, 76);
+    --body-bg: antiquewhite;
+    --fun-bg: rgb(245, 245, 113);
+    --fun-color: rgb(53, 53, 56);
+    --fun-bg-hover: rgb(220, 230, 115);
+    --fun-bg-active: rgb(209, 214, 108);
+    --check-container-bg: rgb(233, 221, 221);
+    --check-span-bg: rgb(82, 133, 187);
+}
+
+:root.dark {
+    --nav-bg: rgb(60, 2, 60); 
+    --body-bg: rgb(18, 18, 34);
+    --fun-bg: rgb(76, 94, 143);
+    --fun-color: azure;
+    --fun-bg-hover: rgb(67, 88, 128);
+    --fun-bg-active: rgb(60, 66, 116);
+    --check-container-bg: rgb(218, 130, 64);
+    --check-span-bg: rgb(243, 235, 171);
+}
+
 body {
-    background: rgb(239, 245, 228);
-    font-family: Helvetica;
-    color: darkslategrey;
+    background: var(--body-bg);
+    font-family: Helvetica, sans-serif;
 }
 
-/* NAV BAR */
+button {
+    cursor: pointer;
+}
 
-.nav-bar ul {
+.functions {
+    width: 100%;
+    background: var(--nav-bg);
+    position: relative;
+}
+
+.functions ul {
     list-style: none;
-    background: rgb(230, 173, 100);
-    padding : 20px;
     display: flex;
+    padding: 20px;
     gap: 20px;
-    position : relative;
 }
 
-.nav-bar input[type="checkbox"] {
+.functions ul #theme-item {
     position: absolute;
-    right : 10px;
+    right: 75px;
 }
 
-.nav-bar button {
+.functions button {
     padding: 10px;
-    font-size: 1.1rem;
-    background: rgb(236, 238, 121);
+    background: var(--fun-bg);
     border: none;
+    font-size: 1.25rem;
     border-radius: 5px;
+    color: var(--fun-color);
 }
 
-.nav-bar button:hover {
-    background: rgb(200, 224, 112);
+.functions button:hover {
+    background: var(--fun-bg-hover);
 }
 
-.nav-bar button:active {
-    background: rgb(206, 204, 105);
+.functions button:active {
+    background: var(--fun-bg-active);
     transform: scale(.99);
 }
 
-@media screen and (max-width: 500px) {
-    
-    /* NAV BAR */
+.check-container {
+    position: absolute;
+    width: 64px;
+    height: 32px;
+    border-radius: 16px;
+    background: var(--check-container-bg);
+}
 
-    .nav-bar ul {
-        padding : 10px;
-        gap: 10px;
+.check-container input[type="checkbox"] {
+    appearance: none;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+}
+
+.check-container span {
+    position: absolute;
+    width: 28px;
+    height: 28px;
+    top: 2px;
+    left: 2px;
+    border-radius: 50%;
+    background: var(--check-span-bg);
+    transition: all .33s;
+    pointer-events: none;
+}
+
+.check-container input[type="checkbox"]:checked + span {
+    transform: translateX(32px);
+}
+
+footer {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    color: red
+}
+
+footer a {
+    text-decoration: none;
+    color: red;
+}
+
+@media screen and (max-width: 700px) {
+    .functions ul {
+        padding: 10px;
+        gap: 5px;
     }
     
-    .nav-bar button {
-        font-size: 1.05rem;
+    .functions button {
+        padding: 5px;
+        font-size: 1rem;
+    }
+
+    .functions ul #theme-item {
+        position: absolute;
+        right: 50px;
+    }
+
+    .check-container {
+        width: 32px;
+        height: 16px;
+        border-radius: 8px;
+    }
+    
+    .check-container span {
+        width: 12px;
+        height: 12px;
+        top: 2px;
+        left: 2px;
+    }
+    
+    .check-container input[type="checkbox"]:checked + span {
+        transform: translateX(16px);
     }
 }

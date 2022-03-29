@@ -1,16 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="main_style.css">
-    <link rel="stylesheet" href="clock_style.css">
-    <link rel="stylesheet" href="timer_style.css">
-    <link rel="stylesheet" href="stopwatch_style.css">
-    <script src="main.js" type="module" defer></script>
-    <!-- 
         play : <a href="https://www.flaticon.com/free-icons/play-button" title="play-button icons">Play-button icons created by Freepik - Flaticon</a>
         pause : <a href="https://www.flaticon.com/free-icons/pause" title="pause icons">Pause icons created by Freepik - Flaticon</a>
         checkmark : <a href="https://www.flaticon.com/free-icons/check-mark" title="check mark icons">Check mark icons created by Gajah Mada - Flaticon</a>
@@ -20,28 +8,4 @@
         reset : <a href="https://www.flaticon.com/free-icons/change" title="change icons">Change icons created by Freepik - Flaticon</a>
         lap : <a href="https://www.flaticon.com/free-icons/stopwatch" title="stopwatch icons">Stopwatch icons created by Freepik - Flaticon</a>
         alarm : Music by <a href="/users/sergequadrado-24990007/?tab=audio&amp;utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=audio&amp;utm_content=21301">SergeQuadrado</a> from <a href="https://pixabay.com/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=music&amp;utm_content=21301">Pixabay</a>
-    -->
-    <title>Time</title>
-</head>
-
-<body>
-    <main>
-        <nav class="functions">
-            <ul>
-                <li><button id="clock">Clock</button></li>
-                <li><button id="timer">Timer</button></li>
-                <li><button id="stopwatch">Stopwatch</button></li>
-                <li id="theme-item"><div class="check-container"><input type="checkbox" id="theme"><span></span></div></li>
-            </ul>
-        </nav>
-        <section id="main-section">
-        </section>
-    </main>
-    <footer>
-        <p>
-            <a href="https://github.com/kxrn0">@kxrn0</a>, <a href="google.com">credits</a>
-        </p>
-    </footer>
-</body>
-
-</html>
+    

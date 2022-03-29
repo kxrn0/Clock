@@ -1,6 +1,35 @@
-:root {
-    --input-field-color: rgb(249, 255, 215);
-    --normal-button-bg: rgb(230, 194, 37);
+:root.light {
+    --timer-bg: rgb(230, 231, 143);
+    --close-bg: rgb(230, 194, 37);
+    --close-bg-hover: rgb(190, 187, 74);
+    --close-bg-active: rgb(164, 175, 68);
+    --add-timer-filter: invert(85%) sepia(61%) saturate(1406%) hue-rotate(0deg) brightness(80%) contrast(75%);
+    --add-timer-filter-hover: invert(85%) sepia(61%) saturate(1406%) hue-rotate(20deg) brightness(80%) contrast(50%);
+    --add-timer-input-active: invert(85%) sepia(61%) saturate(1406%) hue-rotate(10deg) brightness(80%) contrast(30%);
+    --timer-timer-p-bg: rgb(217, 253, 242);
+    --timer-guts-input-bg: rgb(249, 255, 215);
+    --timer-guts-input-color: rgb(26, 24, 24);
+    --timer-inc-button-bg: rgb(230, 194, 37);
+    --timer-inc-button-bg-hover: rgb(190, 187, 74);
+    --timer-inc-button-bg-active: rgb(164, 175, 68);
+    --progress-button-filter: none;
+}
+
+:root.dark {
+    --timer-bg: rgb(74, 86, 174);
+    --close-bg: rgb(157, 161, 209);
+    --close-bg-hover: rgb(123, 131, 186);
+    --close-bg-active: rgb(106, 105, 167);
+    --add-timer-filter: invert(15%) sepia(97%) saturate(1041%) hue-rotate(213deg) brightness(85%) contrast(95%);
+    --add-timer-filter-hover: invert(15%) sepia(97%) saturate(1041%) hue-rotate(230deg) brightness(65%) contrast(95%);
+    --add-timer-input-active: invert(15%) sepia(97%) saturate(1041%) hue-rotate(240deg) brightness(50%) contrast(95%);
+    --timer-timer-p-bg: rgb(7, 37, 77);
+    --timer-guts-input-bg: rgb(110, 135, 184);
+    --timer-guts-input-color: azure;
+    --timer-inc-button-bg: rgb(3, 3, 184);
+    --timer-inc-button-bg-hover: rgb(12, 6, 133);
+    --timer-inc-button-bg-active: rgb(8, 24, 141);
+    --progress-button-filter: invert(75%) sepia(42%) saturate(1086%) hue-rotate(200deg) brightness(100%) contrast(97%);
 }
 
 .timers {
@@ -12,7 +41,7 @@
 }
 
 .timer {
-    background: rgb(230, 231, 143);
+    background: var(--timer-bg);
     width: 325px;
     height: 425px;
     position: relative;
@@ -23,7 +52,7 @@
 .close, .reset {
     position: absolute;
     top: 10px;
-    background: var(--normal-button-bg);
+    background: var(--close-bg);
     background-size: cover;
     width: 25px;
     height: 25px;
@@ -32,13 +61,13 @@
 }
 
 .close:hover, .reset:hover {
-    background: rgb(190, 187, 74);
+    background: var(--close-bg-hover);
     background-image: url("images/close.png");
     background-size: cover;
 }
 
 .close:active, .reset:active {
-    background: rgb(164, 175, 68);
+    background: var(--close-bg-active);
     transform: scale(.98);
     background-size: cover;
 }
@@ -70,7 +99,7 @@
 .timer-name {
     text-align: center;
     padding: 5px;
-    background: var(--input-field-color);
+    /* background: rgb(249, 255, 215); */
     width: 150px;
     border: none;
     font-size: 1.25rem;
@@ -94,6 +123,7 @@
     top: 38px;
     left: 38px;
     background: url("images/play.png");
+    filter: var(--progress-button-filter);
     background-size: cover;
     border: none;
 }
@@ -103,10 +133,16 @@
     display: flex;
 }
 
+.timer-guts input {
+    background: var(--timer-guts-input-bg);
+    color: var(--timer-guts-input-color);
+}
+
 .timer-guts ul input[type="tel"] {
     width: 75px;
     text-align: center;
-    background: var(--input-field-color);
+    /* background: var(--timer-guts-input-bg);
+    color: var(--timer-guts-input-color); */
     border: none;
     padding: 5px;
     font-size: 2.5rem;
@@ -129,9 +165,14 @@
     justify-content: space-between;
 }
 
+.timer-increments p {
+    text-align: center;
+}
+
 .timer-increments button {
     text-align: center;
-    background: var(--normal-button-bg);
+    background: var(--timer-inc-button-bg);
+    color: var(--timer-guts-input-color);
     padding: 5px 10px;
     font-size: 1.25rem;
     width: 50px;
@@ -139,16 +180,12 @@
     border: none;
 }
 
-.timer-increments p {
-    text-align: center;
-}
-
 .timer-increments button:hover {
-    background: rgb(190, 187, 74);
+    background: var(--timer-inc-button-bg-hover);
 }
 
 .timer-increments button:active {
-    background: rgb(164, 175, 68);
+    background: vaR(--timer-inc-button-bg-active);
     transform: scale(.98);
 }
 
@@ -165,22 +202,14 @@
 .timer-timer p {
     width: 75px;
     text-align: center;
-    background: rgb(217, 253, 242);
+    background: var(--timer-timer-p-bg);
     border-radius: 5px;
 }
-
-/* .timer-inputs .inputs {
-    display: none;
-}  */
-
-/* .timer-inputs .timer-timer {
-    display: none;
-} */
 
 .add-timer {
     width: 325px;
     height: 425px;
-    background: rgb(230, 231, 143);
+    background: var(--timer-bg);
     border-radius: 10px;
     display: flex;
     justify-content: center;
@@ -196,15 +225,15 @@
     height: 200px;
     background: url("images/plus.png");
     background-size: cover;
-    filter: invert(85%) sepia(61%) saturate(1406%) hue-rotate(0deg) brightness(80%) contrast(75%);
+    filter: var(--add-timer-filter);
     border: none;
 }
 
 .add-timer button:hover {
-    filter: invert(85%) sepia(61%) saturate(1406%) hue-rotate(20deg) brightness(80%) contrast(50%);
+    filter: var(--add-timer-filter-hover);
 }
 
 .add-timer button:active {
-    filter: invert(85%) sepia(61%) saturate(1406%) hue-rotate(10deg) brightness(80%) contrast(30%);
+    filter: var(--add-timer-input-active);
     transform: scale(.98);
 }

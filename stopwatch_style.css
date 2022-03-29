@@ -1,7 +1,43 @@
+:root.light {
+    --watch-container-bg: rgb(223, 223, 175);
+    --button-filter: none;
+    --watch-lap-li-bg: rgb(255, 248, 217);
+    --paused-bg: rgb(45, 245, 152);
+    --paused-bg-hover: rgb(38, 224, 138);
+    --paused-bg-active: rgb(33, 206, 148);
+    --playing-bg: rgb(245, 107, 130);
+    --playing-bg-hover: rgb(206, 94, 141);
+    --playing-bg-active: rgb(204, 85, 114);
+    --watch-lap-bg: rgb(245, 199, 113);
+    --watch-lap-hover: rgb(233, 193, 107);
+    --watch-lap-active: rgb(192, 182, 88);
+    --watch-bg: rgb(243, 243, 64);
+    --watch-hover: rgb(235, 235, 51);
+    --watch-bg-active: rgb(180, 204, 46);
+}
+
+:root.dark {
+    --watch-container-bg: rgb(5, 62, 107);
+    --button-filter: invert(100%) sepia(93%) saturate(50%) hue-rotate(201deg) brightness(95%) contrast(87%);
+    --watch-lap-li-bg: rgb(68, 99, 167);
+    --paused-bg: azure;
+    --paused-bg-hover: rgb(202, 237, 237);
+    --paused-bg-active: rgb(195, 227, 238);
+    --playing-bg: azure;
+    --playing-bg-hover: rgb(202, 237, 237);
+    --palying-bg-active: rgb(195, 227, 238);
+    --watch-lap-bg: azure;
+    --watch-lap-hover: rgb(202, 237, 237);
+    --watch-lap-active: rgb(195, 227, 238);
+    --watch-bg: azure;
+    --watch-bg-hover: rgb(202, 237, 237);
+    --watch-bg-active: rgb(195, 227, 238);
+}
+
 .watch-container {
     width: 600px;
     margin: 50px auto;
-    background: rgb(223, 223, 175);
+    background: var(--watch-container-bg);
     border-radius: 10px;
 }
 
@@ -30,75 +66,75 @@
 }
 
 #paused {
-    background: rgb(45, 245, 152);
+    background: var(--paused-bg);
     background-image: url("images/play.png");
     background-size: cover;
 }
 
 #paused:hover {
-    background: rgb(38, 224, 138);
+    background: var(--paused-bg-hover);
     background-image: url("images/play.png");
     background-size: cover;
 }
 
 #paused:active {
-    background: rgb(33, 206, 148);
+    background: var(--paused-bg-active);
     background-image: url("images/play.png");
     background-size: cover;
 }
 
 #playing {
-    background: rgb(245, 107, 130);
+    background: var(--playing-bg);
     background-image: url("images/pause.png");
     background-size: cover;
 }
 
 #playing:hover {
-    background: rgb(206, 94, 141);
+    background: var(--playing-bg-hover);
     background-image: url("images/pause.png");
     background-size: cover;
 }
 
 #playing:active {
-    background: rgb(204, 85, 114);
+    background: var(--playing-bg-active);
     background-image: url("images/pause.png");
     background-size: cover;
 }
 
 #watch-lap {
-    background: rgb(245, 199, 113);
+    background: var(--watch-lap-bg);
+    background-image: url("images/lap.png");
+    background-size: cover;
+}
+
+#watch-lap:hover {
+    background: var(--watch-lap-hover);
+    background-image: url("images/lap.png");
+    background-size: cover;
+}
+
+#watch-lap:active {
+    background: var(--watch-lap-active);
     background-image: url("images/lap.png");
     background-size: cover;
 }
 
 #watch-reset {
-    background: rgb(243, 243, 64);
+    background: var(--watch-bg);
     position: absolute;
     right: 10px;
     background-image: url("images/reset.png");
     background-size: cover;
 }
 
-#watch-lap:hover {
-    background: rgb(233, 193, 107);
-    background-image: url("images/lap.png");
-    background-size: cover;
-}
-
 #watch-reset:hover {
-    background: rgb(235, 235, 51);
+    background: var(--watch-bg-hover);
     background-image: url("images/reset.png");
     background-size: cover;
 }
 
-#watch-lap:active {
-    background: rgb(192, 182, 88);
-    background-image: url("images/lap.png");
-    background-size: cover;
-}
-
 #watch-reset:active {
-    background: rgb(180, 204, 46);
+    background: var(--watch-bg-active);
     background-image: url("images/reset.png");
     background-size: cover;
 }
@@ -110,6 +146,7 @@
     margin: 10px;
     background-size: cover;
     border: none;
+    filter: var(--button-filter)
 }
 
 .watch-buttons button:hover {
@@ -127,7 +164,7 @@
 }
 
 .watch-laps ul li:nth-child(odd) {
-    background: rgb(255, 248, 217);
+    background: var(--watch-lap-li-bg);
     border-radius: 10px;
 }
 

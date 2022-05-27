@@ -105,6 +105,7 @@ export const stopwatchObj = (
             laps.innerHTML = '';
             totalLaps = 0;
             totalTime = 0;
+            lapTime = 0;
         });
 
         function compute_values(centiseconds) {
